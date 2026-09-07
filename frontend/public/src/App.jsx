@@ -1,8 +1,14 @@
 import './App.css'
 
+import Hero from './Hero/!main'
+import NavBar from './NavBar/!main'
+
 function App() {
   return (
-    <p>Hello!</p>
+    <>
+      <NavBar />
+      <Hero />
+    </>
   )
 }
 

@@ -1,0 +1,74 @@
+.navBar{
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 5px;
+  padding: 3px 15px;
+  justify-content: flex-end;
+  gap: clamp(0.75rem, 2vw, 2rem);
+}
+
+.navBar .MuiButton-root {
+  font-family: "Roboto Serif", Georgia, serif;
+  padding: 0.4rem 1.15rem;
+}
+
+.navBar .MuiButton-contained {
+  background-color: #212529;
+  color: #F8F9FA;
+}
+
+.navBar .MuiButton-contained:hover {
+  background-color: #343A40;
+  box-shadow: none;
+}
+
+.navBar .MuiButton-outlined {
+  border-color: #6C757D;
+  color: #212529;
+}
+
+.navBar .MuiButton-outlined:hover {
+  border-color: #212529;
+  background-color: rgba(33, 37, 41, 0.06);
+  box-shadow: none;
+}
+
+.nav-auth {
+  display: flex;
+  gap: clamp(0.75rem, 2vw, 2rem);
+}
+
+.navBar .menu-icon-container {
+  display: none;
+  color: #212529;
+}
+
+.menu-icon {
+  font-size: clamp(1.75rem, 2.75vw, 2.25rem);
+  transition: opacity 0.2s ease;
+}
+
+.menu-icon-container:hover .menu-icon {
+  opacity: 0.5;
+}
+
+@media (max-width: 800px) {
+  .navBar .menu-icon-container {
+    display: inline-flex;
+  }
+
+  .nav-auth {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 15px;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 1;
+  }
+
+  .nav-auth.open {
+    display: flex;
+  }
+}
