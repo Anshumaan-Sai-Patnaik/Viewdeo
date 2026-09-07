@@ -1,0 +1,12 @@
+html {
+  min-width: 360px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  min-width: 360px;
+  background: linear-gradient(135deg, #F8F9FA 0%, #ADB5BD 50%, #343A40 100%);
+  min-height: 100vh;
+}
