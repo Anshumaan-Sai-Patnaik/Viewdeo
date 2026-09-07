@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import { app } from "./app.js";
 import { connectDB } from "./config/db.js";
-import {routes} from "./routes"
+import { routes } from "./routes/index.js";
 
 const PORT = process.env.PORT || 3000;
 
