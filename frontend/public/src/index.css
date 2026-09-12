@@ -1,5 +1,29 @@
+:root {
+  --gray-50: #F8F9FA;
+  --gray-100: #E9ECEF;
+  --gray-200: #DEE2E6;
+  --gray-300: #CED4DA;
+  --gray-400: #ADB5BD;
+  --gray-500: #6C757D;
+  --gray-600: #495057;
+  --gray-700: #343A40;
+  --gray-900: #212529;
+
+  --font-display: "Merriweather", Georgia, serif;
+  --font-body: "Roboto Serif", Georgia, serif;
+
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html {
   min-width: 360px;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -7,6 +31,12 @@ body {
   padding: 0;
 
   min-width: 360px;
-  background: linear-gradient(135deg, #F8F9FA 0%, #ADB5BD 50%, #343A40 100%);
   min-height: 100vh;
+
+  font-family: var(--font-body);
+  color: var(--gray-900);
+  background-image:
+    radial-gradient(1100px 620px at 88% 112%, rgba(52, 58, 64, 0.30), transparent 72%),
+    linear-gradient(135deg, var(--gray-50) 0%, var(--gray-200) 48%, var(--gray-400) 100%);
+  background-attachment: fixed;
 }
