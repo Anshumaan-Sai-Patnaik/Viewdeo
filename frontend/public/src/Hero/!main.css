@@ -2,16 +2,110 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: clamp(1.5rem, 4vw, 4rem);
-  padding: clamp(1.5rem, 5vw, 4rem) clamp(1.25rem, 4vw, 3.5rem);
+  gap: clamp(1.5rem, 5vw, 4.5rem);
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(2.5rem, 7vw, 5.5rem) clamp(1.25rem, 4vw, 3.5rem);
+}
+
+.app-info {
+  flex: 1 1 auto;
+}
+
+.app-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1.1rem;
+
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gray-600);
+}
+
+.app-eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--gray-500);
+}
+
+.app-heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.75rem, 6.5vw, 4.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--gray-900);
+}
+
+.app-heading span {
+  color: var(--gray-500);
+}
+
+.app-description {
+  margin: 1.15rem 0 0;
+  max-width: 46ch;
+  font-size: clamp(0.98rem, 1.4vw, 1.15rem);
+  line-height: 1.7;
+  color: var(--gray-600);
+}
+
+.app-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 2.1rem;
+}
+
+.hero .MuiButton-root {
+  padding: 0.7rem 1.75rem;
+  font-size: 1rem;
+}
+
+.hero .MuiButton-contained {
+  background-color: var(--gray-900);
+  color: var(--gray-50);
+  box-shadow: 0 10px 26px rgba(33, 37, 41, 0.20);
+}
+
+.hero .MuiButton-contained:hover {
+  background-color: var(--gray-700);
+  box-shadow: 0 14px 32px rgba(33, 37, 41, 0.28);
+}
+
+.hero .MuiButton-outlined {
+  border-color: var(--gray-400);
+  color: var(--gray-900);
+  background-color: rgba(248, 249, 250, 0.5);
+}
+
+.hero .MuiButton-outlined:hover {
+  border-color: var(--gray-900);
+  background-color: rgba(248, 249, 250, 0.9);
 }
 
 .meet-illustration {
+  position: relative;
   flex: 0 1 48%;
-  min-width: 0;
+}
+
+.meet-illustration::before {
+  content: "";
+  position: absolute;
+  inset: -12% -8%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 70%);
 }
 
 .meet-illustration img {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: auto;
@@ -23,25 +117,21 @@
   }
 }
 
-.app-info {
-  flex: 1 1 auto;
-  min-width: 0;
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-.app-heading {
-  margin: 0;
-  font-family: "Merriweather";
-  font-size: 5vw;
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  letter-spacing: -0.02em;
-  color: #212529;
-}
-
-.app-description {
-  margin: 0.75rem 0 0;
-  max-width: 46ch;
-  font-family: "Roboto Serif", Georgia, serif;
-  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
-  line-height: 1.65;
-  color: #495057;
+.app-eyebrow,
+.app-heading,
+.app-description,
+.app-cta,
+.meet-illustration {
+  animation: hero-rise 0.65s var(--ease) both;
 }

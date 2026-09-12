@@ -1,11 +1,18 @@
+import Button from '@mui/material/Button';
+
 function AppInfo() {
   return ( 
     <div className="app-info">
-      <p className="app-heading">VI<span style={{color: '#6C757D'}}>ew</span>DEO</p>
+      <p className="app-eyebrow">Connecting Conversations, Anywhere</p>
+      <h1 className="app-heading">VI<span>ew</span>DEO</h1>
       <p className="app-description">
-        Now meet often. Start a room in one click and talk face to face &mdash;
+        Now meet often. Join a room in one click, no <span style={{ whiteSpace: "nowrap" }}>sign-in</span> required, or sign in to start your own meeting &mdash;
         simple, reliable video calls for teams, classes, and catch-ups.
       </p>
+      <div className="app-cta">
+        <Button variant="contained" size="large">Start a meeting</Button>
+        <Button variant="outlined" size="large">Join with a code</Button>
+      </div>
     </div>
    );
 }

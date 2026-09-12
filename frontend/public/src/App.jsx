@@ -5,10 +5,12 @@ import NavBar from './NavBar/!main'
 
 function App() {
   return (
-    <>
+    <div className="app-shell">
       <NavBar />
-      <Hero />
-    </>
+      <main className="app-main">
+        <Hero />
+      </main>
+    </div>
   )
 }
 
