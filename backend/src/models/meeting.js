@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const meetingSchema = new mongoose.Schema({
   createdBy: {
@@ -32,4 +32,4 @@ const meetingSchema = new mongoose.Schema({
   ]
 });
 
-module.exports = mongoose.model('Meeting', meetingSchema);
+export default mongoose.model('Meeting', meetingSchema);

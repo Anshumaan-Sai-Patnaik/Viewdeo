@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 
-import AuthModal from '../AuthModal/!main';
+import AuthModal from '../components/AuthModal/!main';
 
 function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
