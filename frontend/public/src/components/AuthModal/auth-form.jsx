@@ -1,10 +1,26 @@
 import Button from '@mui/material/Button';
 
+import api from '../../services/api.js'
+
 function AuthForm({ mode }) {
   const isSignup = mode === 'signup';
 
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const password = formData.get('password');
+
+    const result = await api.post("/user/signup", {name, email, password})
+
+    console.log(result);
+  }
+
   return ( 
-    <form className="auth-form" onSubmit={(event) => event.preventDefault()}>
+    <form className="auth-form" onSubmit={ handleSubmit }>
       {isSignup && (
         <div className="auth-field">
           <label htmlFor="auth-name">Full name</label>
