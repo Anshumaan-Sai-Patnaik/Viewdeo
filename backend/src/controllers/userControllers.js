@@ -1,23 +1,25 @@
 import User from "../models/user.js";
 
 export const makeUser = async (req, res) => {
-  let { name, email, password } = req.body;
+  const { name, email, password } = req.body;
+  const newUser = new User({username: name, emailID: email});
 
   try {
-    const user = await User.create({
-      username: name,
-      emailID: email,
-      password: password
-    });
-
+    const registeredNewUser = await User.register(newUser, password);
     return res.json({
       success: true,
-      user: user
+      user: registeredNewUser
     });
   } catch (err) {
     return res.status(500).json({
       success: false,
-      message: "Something went wrong"
+      message: err
     });
   }
+};
+
+export const runUser = async (req, res) => {
+  return res.json({
+    success: true,
+  });
 };

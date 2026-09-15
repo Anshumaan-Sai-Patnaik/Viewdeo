@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import passportLocalMongoosePackage from "passport-local-mongoose";
+
+const passportLocalMongoose = passportLocalMongoosePackage.default;
 
 const userSchema = new mongoose.Schema({
   image: {
@@ -11,11 +14,11 @@ const userSchema = new mongoose.Schema({
   emailID: {
     type: String,
     required: true
-  },
-  password: {
-    type: String,
-    required: true
   }
+});
+
+userSchema.plugin(passportLocalMongoose, {
+  usernameField: "emailID"
 });
 
 export default mongoose.model("User", userSchema);

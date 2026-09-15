@@ -10,13 +10,15 @@ function AuthForm({ mode }) {
 
     const formData = new FormData(event.target);
 
-    const name = formData.get('name');
+    const name = isSignup ? formData.get('name') : 'null';
     const email = formData.get('email');
     const password = formData.get('password');
 
-    const result = await api.post("/user/signup", {name, email, password})
+    const result = isSignup ? await api.post("/user/signup", {name, email, password}) : await api.post("/user/login", {emailID: email, password});
 
-    console.log(result);
+    if(result.data.success) {
+      window.location.href = import.meta.env.VITE_PROTECTED_URL;
+    }
   }
 
   return ( 
@@ -24,18 +26,18 @@ function AuthForm({ mode }) {
       {isSignup && (
         <div className="auth-field">
           <label htmlFor="auth-name">Full name</label>
-          <input id="auth-name" name="name" type="text" placeholder="Ada Lovelace" autoComplete="name" />
+          <input id="auth-name" name="name" type="text" placeholder="Ada Lovelace" autoComplete="name" required />
         </div>
       )}
 
       <div className="auth-field">
         <label htmlFor="auth-email">Email</label>
-        <input id="auth-email" name="email" type="email" placeholder="you@example.com" autoComplete="email" />
+        <input id="auth-email" name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
       </div>
 
       <div className="auth-field">
         <label htmlFor="auth-password">Password</label>
-        <input id="auth-password" name="password" type="password" placeholder={isSignup ? "At least 8 characters" : "Your password"} autoComplete={isSignup ? "new-password" : "current-password"} />
+        <input id="auth-password" name="password" type="password" placeholder={isSignup ? "At least 8 characters" : "Your password"} minLength={8} autoComplete={isSignup ? "new-password" : "current-password"} required />
       </div>
 
       {!isSignup && (
