@@ -1,8 +1,12 @@
 import './App.css'
 
+import { useAuth } from './context/authContext'
+
 function App() {
+  const { user } = useAuth();
+
   return (
-    <p>Hello user!</p>
+    <p>Hello {user.username}</p>
   )
 }
 

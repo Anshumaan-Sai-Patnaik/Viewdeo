@@ -8,7 +8,7 @@ import './config/passport.js';
 const app = express();
 
 app.use(cors({
-  origin: process.env.VITE_PUBLIC_URL|| "http://localhost:5173",
+  origin: [ process.env.VITE_PUBLIC_URL|| "http://localhost:5173", process.env.VITE_PROTECTED_URL|| "http://localhost:5174" ],
   credentials: true
 }));
 
