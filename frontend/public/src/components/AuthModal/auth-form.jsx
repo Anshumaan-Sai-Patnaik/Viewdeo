@@ -2,8 +2,11 @@ import Button from '@mui/material/Button';
 
 import api from '../../services/api.js'
 
+import { useFlash } from '../../context/FlashContext.jsx';
+
 function AuthForm({ mode }) {
   const isSignup = mode === 'signup';
+  const { showFlash } = useFlash();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -14,10 +17,16 @@ function AuthForm({ mode }) {
     const email = formData.get('email');
     const password = formData.get('password');
 
-    const result = isSignup ? await api.post("/user/signup", {name, email, password}) : await api.post("/user/login", {emailID: email, password});
+    try {
+      const result = isSignup ? await api.post("/user/signup", {name, email, password}) : await api.post("/user/login", {emailID: email, password});
 
-    if(result.data.success) {
-      window.location.href = import.meta.env.VITE_PROTECTED_URL;
+      if(result.data.success) {
+        window.location.href = import.meta.env.VITE_PROTECTED_URL;
+      }
+    } catch (error) {
+      console.error("Auth error:", error);
+      const message = error.response?.data?.message || "An unexpected error occurred.";
+      showFlash(message, 'error');
     }
   }
 
