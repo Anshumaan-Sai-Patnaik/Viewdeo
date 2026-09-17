@@ -38,7 +38,9 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
 
         <Button
           className="auth-google" variant="outlined" size="large"
+          href={`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/user/google`}
           startIcon={<i className="fa-brands fa-google" aria-hidden="true"></i>}
+          sx={{ textDecoration: 'none' }}
         >
           {label}
         </Button>

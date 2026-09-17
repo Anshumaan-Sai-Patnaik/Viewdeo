@@ -14,6 +14,11 @@ const userSchema = new mongoose.Schema({
   emailID: {
     type: String,
     required: true
+  },
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true
   }
 });
 

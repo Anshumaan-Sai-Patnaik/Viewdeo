@@ -177,7 +177,7 @@
   color: var(--gray-600);
 }
 
-.auth-modal a,
+.auth-modal a:not(.auth-google),
 .auth-switch button {
   color: var(--gray-900);
   font-family: var(--font-body);
