@@ -4,11 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 
-import AuthModal from '../components/AuthModal/!main';
-
-function NavBar() {
+function NavBar({ setAuthMode }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [authMode, setAuthMode] = useState(null);
   const navRef = useRef(null);
 
   useEffect(() => {
@@ -44,10 +41,6 @@ function NavBar() {
           </div>
         </div>
       </header>
-
-      {authMode && (
-        <AuthModal mode={authMode} onClose={() => setAuthMode(null)} onSwitchMode={setAuthMode} />
-      )}
     </>
    );
 }

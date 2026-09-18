@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import api from "./services/api";
 import Hero from './Hero/!main'
 import NavBar from './NavBar/!main'
+import AuthModal from './components/AuthModal/!main'
 import { useFlash } from "./context/FlashContext.jsx";
 
 function App() {
   const [checking, setChecking] = useState(true);
+  const [authMode, setAuthMode] = useState(null);
   const { showFlash } = useFlash();
 
   useEffect(() => {
@@ -35,10 +37,14 @@ function App() {
 
   return (
     <div className="app-shell">
-      <NavBar />
+      <NavBar setAuthMode={setAuthMode} />
       <main className="app-main">
-        <Hero />
+        <Hero setAuthMode={setAuthMode} />
       </main>
+
+      {authMode && (
+        <AuthModal mode={authMode} onClose={() => setAuthMode(null)} onSwitchMode={setAuthMode} />
+      )}
     </div>
   )
 }

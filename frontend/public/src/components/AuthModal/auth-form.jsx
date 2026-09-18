@@ -13,9 +13,18 @@ function AuthForm({ mode }) {
 
     const formData = new FormData(event.target);
 
-    const name = isSignup ? formData.get('name') : 'null';
-    const email = formData.get('email');
-    const password = formData.get('password');
+    const name = isSignup ? formData.get('name').trim() : 'null';
+    const email = formData.get('email').trim();
+    const password = formData.get('password').trim();
+
+    if (!email || !password) {
+      if (isSignup && !name) {
+        showFlash("Please enter name, email and password.", "error");
+        return;
+      }
+      showFlash("Please enter both email and password.", "error");
+      return;
+    }
 
     try {
       const result = isSignup ? await api.post("/auth/signup", {name, email, password}) : await api.post("/auth/login", {emailID: email, password});

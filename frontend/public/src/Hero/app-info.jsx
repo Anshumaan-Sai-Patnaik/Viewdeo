@@ -1,6 +1,13 @@
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 
-function AppInfo() {
+import { useFlash } from '../context/FlashContext.jsx';
+import JoinModal from '../components/JoinModal/!main.jsx';
+
+function AppInfo({ setAuthMode }) {
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const { showFlash } = useFlash();
+
   return ( 
     <div className="app-info">
       <p className="app-eyebrow">Connecting Conversations, Anywhere</p>
@@ -10,9 +17,22 @@ function AppInfo() {
         simple, reliable video calls for teams, classes, and catch-ups.
       </p>
       <div className="app-cta">
-        <Button variant="contained" size="large">Start a meeting</Button>
-        <Button variant="outlined" size="large">Join with a code</Button>
+        <Button 
+          variant="contained" 
+          size="large" 
+          onClick={() => {
+            showFlash("You have to sign up or login first to start a meeting of your own.", "info");
+            setAuthMode('signup');
+          }}
+        >
+          Start a meeting
+        </Button>
+        <Button variant="outlined" size="large" onClick={() => setShowJoinModal(true)}>Join with a code</Button>
       </div>
+
+      {showJoinModal && (
+        <JoinModal onClose={() => setShowJoinModal(false)} />
+      )}
     </div>
    );
 }
