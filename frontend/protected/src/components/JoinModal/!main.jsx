@@ -30,7 +30,7 @@ function JoinModal({ onClose }) {
     try {
       const result = await api.post("/meeting/join", {
         meetingCode: meetingCode.trim(),
-        name: user.name
+        name: user.username
       });
 
       if (result.data.success) {
