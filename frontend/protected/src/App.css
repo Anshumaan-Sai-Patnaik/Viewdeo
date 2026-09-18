@@ -1,0 +1,8 @@
+.MuiButton-root:active {
+  transform: translateY(1px);
+}
+
+.MuiButton-contained:hover {
+  background-color: var(--gray-700);
+  box-shadow: 0 6px 16px rgba(33, 37, 41, 0.22);
+}

@@ -1,9 +1,11 @@
 import { Router } from "express";
 
-import userRoutes from "./userRoutes.js";
+import authRoutes from "./authRoutes.js";
+import meetingRoutes from "./meetingRoutes.js";
 
 const routes = Router();
 
-routes.use("/user", userRoutes);
+routes.use("/auth", authRoutes);
+routes.use("/meeting", meetingRoutes);
 
 export { routes };

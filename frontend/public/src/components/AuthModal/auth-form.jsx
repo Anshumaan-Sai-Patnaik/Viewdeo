@@ -18,7 +18,7 @@ function AuthForm({ mode }) {
     const password = formData.get('password');
 
     try {
-      const result = isSignup ? await api.post("/user/signup", {name, email, password}) : await api.post("/user/login", {emailID: email, password});
+      const result = isSignup ? await api.post("/auth/signup", {name, email, password}) : await api.post("/auth/login", {emailID: email, password});
 
       if(result.data.success) {
         window.location.href = import.meta.env.VITE_PROTECTED_URL;

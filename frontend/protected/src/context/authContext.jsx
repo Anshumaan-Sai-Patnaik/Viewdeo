@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     api
-      .get("/user/me")
+      .get("/auth/me")
       .then(({ data }) => {
         setUser(data.user);
         setStatus("ready");

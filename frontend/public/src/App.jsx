@@ -20,7 +20,7 @@ function App() {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
 
-    api.get("/user/me")
+    api.get("/auth/me")
       .then(() => {
         window.location.href = import.meta.env.VITE_PROTECTED_URL || "http://localhost:5174";
       })
