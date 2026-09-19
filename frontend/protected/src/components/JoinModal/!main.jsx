@@ -33,9 +33,11 @@ function JoinModal({ onClose }) {
         name: user.username
       });
 
-      if (result.data.success) {
-        console.log(result);
+      if (!result.data.success) {
+        showFlash(result.data.message, 'error');
+        return;
       }
+      console.log(result);  
     } catch (error) {
       const message = error.response?.data?.message || "An unexpected error occurred while joining.";
       showFlash(message, 'error');

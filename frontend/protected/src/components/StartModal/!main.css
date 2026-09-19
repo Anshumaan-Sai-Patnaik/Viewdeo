@@ -1,0 +1,90 @@
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1.25rem;
+  overflow-y: auto;
+  background: rgba(33, 37, 41, 0.45);
+  backdrop-filter: blur(6px);
+  animation: auth-fade 0.2s var(--ease) both;
+}
+
+.auth-modal {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  margin: auto;
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  background: var(--gray-50);
+  border: 1px solid rgba(33, 37, 41, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 30px 70px rgba(33, 37, 41, 0.35);
+  animation: auth-pop 0.25s var(--ease) both;
+}
+
+.auth-modal .auth-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  color: var(--gray-500);
+  font-size: 1.1rem;
+}
+
+.auth-modal .auth-close:hover {
+  color: var(--gray-900);
+}
+
+.auth-head {
+  text-align: center;
+  margin-bottom: 1.6rem;
+}
+
+.auth-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--gray-900);
+  word-break: break-word;
+}
+
+.auth-modal .auth-submit {
+  width: 100%;
+  padding: 0.72rem 1rem;
+  font-size: 0.98rem;
+  background-color: var(--gray-900);
+  color: var(--gray-50);
+  box-shadow: 0 10px 24px rgba(33, 37, 41, 0.20);
+}
+
+.auth-modal .auth-submit:hover {
+  background-color: var(--gray-700);
+  box-shadow: 0 14px 30px rgba(33, 37, 41, 0.28);
+}
+
+@keyframes auth-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes auth-pop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
