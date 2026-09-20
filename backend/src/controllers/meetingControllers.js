@@ -119,3 +119,56 @@ export const startMeeting = async (req, res) => {
     });
   }
 }
+
+export const endMeeting = async (req, res) => {
+  if (!req.isAuthenticated()) return res.status(401).json({
+    success: false,
+    message: "Unauthorized request"
+  });
+
+  const {meetingCode} = req.body;
+
+  const meeting = await Meeting.findOne({ meetingCode: meetingCode });
+  
+  if(!meeting) {
+    return res.status(404).json({
+      success: false,
+      message: "Meeting Code Invalid"
+    })
+  }
+
+  if (meeting.endedAt) {
+    return res.status(410).json({
+      success: false,
+      message: "Meeting has already Ended"
+    });
+  }
+
+  if(!meeting.startedAt) {
+    return res.status(410).json({
+      success: false,
+      message: "Meeting has not Started"
+    })
+  }
+
+  if(!meeting.createdBy.equals(req.user._id)) {
+    return res.status(403).json({
+      success: false,
+      message: "You are not the host of this meeting"
+    })
+  }
+
+  try {
+    await Meeting.updateOne({ meetingCode: meetingCode }, {
+      endedAt: new Date()
+    });
+    return res.status(201).json({
+      success: true
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message || "An error occurred while joining meeting."
+    });
+  }
+}

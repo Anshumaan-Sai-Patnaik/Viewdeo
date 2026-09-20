@@ -1,13 +1,16 @@
 import './!main.css';
 
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 
 import { useFlash } from '../../context/FlashContext.jsx';
 import api from '../../services/api.js';
 
-function StartModal({ onClose, meetingCode }) {
+function StartModal({ onClose, meetingCode, setInMeeting }) {
   const { showFlash } = useFlash();
+
+  const [clickedStart, setClickedStart] = useState(false);
 
   const closeIfBackdrop = (event) => {
     if (event.target === event.currentTarget) onClose();
@@ -24,6 +27,8 @@ function StartModal({ onClose, meetingCode }) {
         return;
       };
       console.log(result);
+      setClickedStart(true);
+      setInMeeting(true);
     } catch (error) {
       const message = error.response?.data?.message || "An unexpected error occurred while Starting Meeting.";
       showFlash(message, 'error');
@@ -46,7 +51,7 @@ function StartModal({ onClose, meetingCode }) {
           </h2>
         </div>
 
-        <Button className="auth-submit" variant="contained" size="large" onClick={handleStartSubmit} style={{ marginTop: '1rem' }}>
+        <Button className="auth-submit" variant="contained" size="large" onClick={handleStartSubmit} style={{ marginTop: '1rem' }} disabled={clickedStart}>
           Start Meeting
         </Button>
       </div>

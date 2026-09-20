@@ -1,5 +1,6 @@
 import './!main.css';
 
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 
@@ -7,9 +8,11 @@ import { useAuth } from '../../context/authContext'
 import { useFlash } from '../../context/FlashContext.jsx';
 import api from '../../services/api.js';
 
-function JoinModal({ onClose }) {
+function JoinModal({ onClose, setInMeeting }) {
   const { user } = useAuth();
   const { showFlash } = useFlash();
+
+  const [clickedJoin, setClickedJoin] = useState(false);
 
   const closeIfBackdrop = (event) => {
     if (event.target === event.currentTarget) onClose();
@@ -37,7 +40,9 @@ function JoinModal({ onClose }) {
         showFlash(result.data.message, 'error');
         return;
       }
-      console.log(result);  
+      console.log(result);
+      setClickedJoin(true);
+      setInMeeting(true); 
     } catch (error) {
       const message = error.response?.data?.message || "An unexpected error occurred while joining.";
       showFlash(message, 'error');
@@ -72,7 +77,7 @@ function JoinModal({ onClose }) {
               autoFocus
             />
           </div>
-          <Button className="auth-submit" variant="contained" size="large" type="submit" style={{ marginTop: '1rem' }}>
+          <Button className="auth-submit" variant="contained" size="large" type="submit" style={{ marginTop: '1rem' }} disabled={clickedJoin}>
             Join Meeting
           </Button>
         </form>
