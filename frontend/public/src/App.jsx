@@ -1,11 +1,16 @@
 import './App.css'
 import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 
 import api from "./services/api";
 import Hero from './Hero/!main'
 import NavBar from './NavBar/!main'
 import AuthModal from './components/AuthModal/!main'
 import { useFlash } from "./context/FlashContext.jsx";
+
+const socket = io("http://localhost:3000", {
+  withCredentials: true
+});
 
 function App() {
   const [checking, setChecking] = useState(true);

@@ -2,12 +2,17 @@ import './App.css'
 
 import { useState } from 'react';
 import Button from '@mui/material/Button';
+import { io } from "socket.io-client";
 
 import { useAuth } from './context/authContext'
 import { useFlash } from './context/FlashContext.jsx';
 import api from './services/api'
 import StartModal from './components/StartModal/!main.jsx';
 import JoinModal from './components/JoinModal/!main.jsx';
+
+const socket = io("http://localhost:3000", {
+  withCredentials: true
+});
 
 function App() {
   const { user } = useAuth();
@@ -29,7 +34,9 @@ function App() {
         return;
       }
       setMeetingCode(result.data.meeting.meetingCode);
-      setShowStartModal(true);
+      setTimeout(() => {
+        setShowStartModal(true);
+      }, 500);
     } catch (error) {
       const message = error.response?.data?.message || "An unexpected error occurred while Creating Meeting.";
       showFlash(message, 'error');

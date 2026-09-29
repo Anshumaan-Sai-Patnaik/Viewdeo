@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
-import session from "express-session";
 import passport from "passport";
+
+import { sessionMiddleware } from "./config/session.js";
 
 import './config/passport.js';
 
@@ -14,16 +15,7 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    }
-  })
-);
+app.use(sessionMiddleware);
 
 app.use(passport.initialize());
 app.use(passport.session());
