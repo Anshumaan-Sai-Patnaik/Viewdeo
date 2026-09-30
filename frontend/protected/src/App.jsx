@@ -2,17 +2,12 @@ import './App.css'
 
 import { useState } from 'react';
 import Button from '@mui/material/Button';
-import { io } from "socket.io-client";
 
 import { useAuth } from './context/authContext'
 import { useFlash } from './context/FlashContext.jsx';
-import api from './services/api'
+import httpAPI from './services/http'
 import StartModal from './components/StartModal/!main.jsx';
 import JoinModal from './components/JoinModal/!main.jsx';
-
-const socket = io("http://localhost:3000", {
-  withCredentials: true
-});
 
 function App() {
   const { user } = useAuth();
@@ -28,7 +23,7 @@ function App() {
 
   async function handleCreateMeeting() {
     try {
-      const result = await api.post("/meeting/create");
+      const result = await httpAPI.post("/meeting/create");
 
       if(!result.data.success) {
         showFlash(result.data.message, 'error');
@@ -55,10 +50,10 @@ function App() {
       <Button variant="contained" onClick={() => setShowJoinModal(true)} disabled={inMeeting}>Join Meeting</Button>
 
       {showStartModal && (
-        <StartModal onClose={() => setShowStartModal(false)} meetingCode={meetingCode} setInMeeting={setInMeeting} />
+        <StartModal onClose={() => setShowStartModal(false)} meetingCode={meetingCode} inMeeting={inMeeting} setInMeeting={setInMeeting} />
       )}
       {showJoinModal && (
-        <JoinModal onClose={() => setShowJoinModal(false)} setInMeeting={setInMeeting} />
+        <JoinModal onClose={() => setShowJoinModal(false)} inMeeting={inMeeting} setInMeeting={setInMeeting} />
       )}
     </div>
   )

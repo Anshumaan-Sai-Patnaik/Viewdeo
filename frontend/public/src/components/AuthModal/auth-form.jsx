@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 
-import api from '../../services/api.js'
+import httpAPI from '../../services/http'
 
 import { useFlash } from '../../context/FlashContext.jsx';
 
@@ -27,7 +27,7 @@ function AuthForm({ mode }) {
     }
 
     try {
-      const result = isSignup ? await api.post("/auth/signup", {name, email, password}) : await api.post("/auth/login", {emailID: email, password});
+      const result = isSignup ? await httpAPI.post("/auth/signup", {name, email, password}) : await httpAPI.post("/auth/login", {emailID: email, password});
 
       if(result.data.success) {
         window.location.href = import.meta.env.VITE_PROTECTED_URL;

@@ -4,9 +4,10 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 
 import { useFlash } from '../../context/FlashContext.jsx';
-import api from '../../services/api.js';
+import httpAPI from '../../services/http.js';
+import socketAPI from "../../services/socket.js";
 
-function JoinModal({ onClose, setInMeeting }) {
+function JoinModal({ onClose, inMeeting, setInMeeting }) {
   const { showFlash } = useFlash();
 
   const closeIfBackdrop = (event) => {
@@ -27,7 +28,7 @@ function JoinModal({ onClose, setInMeeting }) {
     }
 
     try {
-      const result = await api.post("/meeting/join", {
+      const result = await httpAPI.post("/meeting/join", {
         meetingCode: meetingCode.trim(),
         name: guestName.trim()
       });
@@ -35,6 +36,11 @@ function JoinModal({ onClose, setInMeeting }) {
       if (result.data.success) {
         console.log(result);
         setInMeeting(true);
+        const participantId = result.data.participant._id;
+        socketAPI.emit("request-to-join", {
+          meetingCode,
+          participantId
+        });
       }
     } catch (error) {
       const message = error.response?.data?.message || "An unexpected error occurred while joining.";
@@ -85,7 +91,7 @@ function JoinModal({ onClose, setInMeeting }) {
             />
           </div>
 
-          <Button className="auth-submit" variant="contained" size="large" type="submit" style={{ marginTop: '1rem' }}>
+          <Button className="auth-submit" variant="contained" size="large" type="submit" style={{ marginTop: '1rem' }} disabled={inMeeting}>
             Join Meeting
           </Button>
         </form>

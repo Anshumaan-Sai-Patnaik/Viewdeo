@@ -54,17 +54,16 @@ export const joinMeeting = async (req, res) => {
       type: isAuthenticated ? 'user' : 'guest',
       userId: isAuthenticated ? req.user._id : undefined,
       guestId: !isAuthenticated ? generateGuestId() : undefined,
-      name: name
+      name: name,
+      status: 'waiting'
     }
-    await Meeting.updateOne({ meetingCode: meetingCode }, {
-      $push: {
-        participants: newParticipant
-      }
-    });
+    const participant = meeting.participants.create(newParticipant);
+    meeting.participants.push(participant);
+    await meeting.save();
     return res.status(201).json({
       success: true,
       status: meetingStatus,
-      participant: newParticipant
+      participant: participant
     });
   } catch (err) {
     return res.status(500).json({

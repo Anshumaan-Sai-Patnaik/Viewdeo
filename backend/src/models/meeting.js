@@ -34,6 +34,11 @@ const meetingSchema = new mongoose.Schema({
       name: {
         type: String,
         required: true
+      },
+      status: {
+        type: String,
+        enum: ["waiting", "accepted", "rejected"],
+        default: "waiting"
       }
     }
   ]

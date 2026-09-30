@@ -5,12 +5,10 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 
 import { useFlash } from '../../context/FlashContext.jsx';
-import api from '../../services/api.js';
+import httpAPI from '../../services/http.js';
 
-function StartModal({ onClose, meetingCode, setInMeeting }) {
+function StartModal({ onClose, meetingCode, inMeeting, setInMeeting }) {
   const { showFlash } = useFlash();
-
-  const [clickedStart, setClickedStart] = useState(false);
 
   const closeIfBackdrop = (event) => {
     if (event.target === event.currentTarget) onClose();
@@ -18,7 +16,7 @@ function StartModal({ onClose, meetingCode, setInMeeting }) {
 
   const handleStartSubmit = async () => {
     try {
-      const result = await api.post("/meeting/start", {
+      const result = await httpAPI.post("/meeting/start", {
         meetingCode: meetingCode
       });
 
@@ -27,7 +25,6 @@ function StartModal({ onClose, meetingCode, setInMeeting }) {
         return;
       };
       console.log(result);
-      setClickedStart(true);
       setInMeeting(true);
     } catch (error) {
       const message = error.response?.data?.message || "An unexpected error occurred while Starting Meeting.";
@@ -51,7 +48,7 @@ function StartModal({ onClose, meetingCode, setInMeeting }) {
           </h2>
         </div>
 
-        <Button className="auth-submit" variant="contained" size="large" onClick={handleStartSubmit} style={{ marginTop: '1rem' }} disabled={clickedStart}>
+        <Button className="auth-submit" variant="contained" size="large" onClick={handleStartSubmit} style={{ marginTop: '1rem' }} disabled={inMeeting}>
           Start Meeting
         </Button>
       </div>

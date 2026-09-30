@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-import api from "../services/api.js";
+import httpAPI from "../services/http.js";
 
 const AuthContext = createContext(null);
 
@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
   const [status, setStatus] = useState("checking");
 
   useEffect(() => {
-    api
+    httpAPI
       .get("/auth/me")
       .then(({ data }) => {
         setUser(data.user);

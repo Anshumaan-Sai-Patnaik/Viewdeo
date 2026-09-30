@@ -1,16 +1,12 @@
 import './App.css'
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
 
-import api from "./services/api";
+import httpAPI from "./services/http";
+import socketAPI from "./services/socket";
 import Hero from './Hero/!main'
 import NavBar from './NavBar/!main'
 import AuthModal from './components/AuthModal/!main'
 import { useFlash } from "./context/FlashContext.jsx";
-
-const socket = io("http://localhost:3000", {
-  withCredentials: true
-});
 
 function App() {
   const [checking, setChecking] = useState(true);
@@ -27,7 +23,7 @@ function App() {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
 
-    api.get("/auth/me")
+    httpAPI.get("/auth/me")
       .then(() => {
         window.location.href = import.meta.env.VITE_PROTECTED_URL || "http://localhost:5174";
       })

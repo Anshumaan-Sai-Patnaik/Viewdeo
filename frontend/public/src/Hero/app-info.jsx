@@ -28,11 +28,11 @@ function AppInfo({ setAuthMode }) {
         >
           Start a meeting
         </Button>
-        <Button variant="outlined" size="large" onClick={() => setShowJoinModal(true)}>Join with a code</Button>
+        <Button variant="outlined" size="large" onClick={() => setShowJoinModal(true)} disabled={inMeeting}>Join with a code</Button>
       </div>
 
       {showJoinModal && (
-        <JoinModal onClose={() => setShowJoinModal(false)} setInMeeting={setInMeeting} disabled={inMeeting} />
+        <JoinModal onClose={() => setShowJoinModal(false)} inMeeting={inMeeting} setInMeeting={setInMeeting} />
       )}
     </div>
    );
