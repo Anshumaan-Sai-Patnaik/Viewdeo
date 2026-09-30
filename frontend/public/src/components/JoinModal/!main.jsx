@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import { useFlash } from '../../context/FlashContext.jsx';
 import api from '../../services/api.js';
 
-function JoinModal({ onClose }) {
+function JoinModal({ onClose, setInMeeting }) {
   const { showFlash } = useFlash();
 
   const closeIfBackdrop = (event) => {
@@ -34,6 +34,7 @@ function JoinModal({ onClose }) {
 
       if (result.data.success) {
         console.log(result);
+        setInMeeting(true);
       }
     } catch (error) {
       const message = error.response?.data?.message || "An unexpected error occurred while joining.";

@@ -6,6 +6,7 @@ import JoinModal from '../components/JoinModal/!main.jsx';
 
 function AppInfo({ setAuthMode }) {
   const [showJoinModal, setShowJoinModal] = useState(false);
+  const [inMeeting, setInMeeting] = useState(false);
   const { showFlash } = useFlash();
 
   return ( 
@@ -31,7 +32,7 @@ function AppInfo({ setAuthMode }) {
       </div>
 
       {showJoinModal && (
-        <JoinModal onClose={() => setShowJoinModal(false)} />
+        <JoinModal onClose={() => setShowJoinModal(false)} setInMeeting={setInMeeting} disabled={inMeeting} />
       )}
     </div>
    );

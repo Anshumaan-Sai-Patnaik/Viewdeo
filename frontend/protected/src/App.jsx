@@ -23,6 +23,7 @@ function App() {
   const [showStartModal, setShowStartModal] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
 
+  const [hasMeeting, setHasMeeting] = useState(false);
   const [inMeeting, setInMeeting] = useState(false);
 
   async function handleCreateMeeting() {
@@ -33,6 +34,7 @@ function App() {
         showFlash(result.data.message, 'error');
         return;
       }
+      setHasMeeting(true);
       setMeetingCode(result.data.meeting.meetingCode);
       setTimeout(() => {
         setShowStartModal(true);
@@ -46,7 +48,7 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-6">
       <p className="text-2xl font-medium">Hello, {user.username}</p>
-      <Button variant="contained" onClick={handleCreateMeeting} disabled={inMeeting}>Create Meeting</Button>
+      <Button variant="contained" onClick={handleCreateMeeting} disabled={hasMeeting || inMeeting}>Create Meeting</Button>
       {meetingCode && (
         <Button variant="contained" onClick={() => setShowStartModal(true)} disabled={inMeeting}>Start Meeting</Button>
       )}
