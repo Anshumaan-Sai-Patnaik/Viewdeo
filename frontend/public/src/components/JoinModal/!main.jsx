@@ -35,11 +35,16 @@ function JoinModal({ onClose, inMeeting, setInMeeting }) {
 
       if (result.data.success) {
         console.log(result);
-        setInMeeting(true);
         const participantId = result.data.participant._id;
         socketAPI.emit("request-to-join", {
           meetingCode,
           participantId
+        },
+        (response) => {
+          setInMeeting(response);
+        });
+        socketAPI.on("participant-accepted", (data) => {
+          console.log("Participant accepted:", data);
         });
       }
     } catch (error) {

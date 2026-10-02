@@ -8,6 +8,7 @@ import { useFlash } from './context/FlashContext.jsx';
 import httpAPI from './services/http'
 import StartModal from './components/StartModal/!main.jsx';
 import JoinModal from './components/JoinModal/!main.jsx';
+import MeetModal from './components/MeetModal/!main.jsx';
 
 function App() {
   const { user } = useAuth();
@@ -17,6 +18,7 @@ function App() {
 
   const [showStartModal, setShowStartModal] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
+  const [showMeetModal, setShowMeetModal] = useState(false);
 
   const [hasMeeting, setHasMeeting] = useState(false);
   const [inMeeting, setInMeeting] = useState(false);
@@ -50,10 +52,14 @@ function App() {
       <Button variant="contained" onClick={() => setShowJoinModal(true)} disabled={inMeeting}>Join Meeting</Button>
 
       {showStartModal && (
-        <StartModal onClose={() => setShowStartModal(false)} meetingCode={meetingCode} inMeeting={inMeeting} setInMeeting={setInMeeting} />
+        <StartModal onClose={() => setShowStartModal(false)} meetingCode={meetingCode} inMeeting={inMeeting} setInMeeting={setInMeeting} setShowMeetModal={setShowMeetModal} />
       )}
       {showJoinModal && (
         <JoinModal onClose={() => setShowJoinModal(false)} inMeeting={inMeeting} setInMeeting={setInMeeting} />
+      )}
+
+      {showMeetModal && (
+        <MeetModal onClose={() => setShowMeetModal(false)} meetingCode={meetingCode} />
       )}
     </div>
   )

@@ -34,7 +34,7 @@ export const joinMeeting = async (req, res) => {
 
   const meeting = await Meeting.findOne({ meetingCode: meetingCode });
   
-  if(!meeting) {
+  if (!meeting) {
     return res.status(404).json({
       success: false,
       message: "Meeting Code Invalid"
@@ -42,7 +42,7 @@ export const joinMeeting = async (req, res) => {
   }
 
   try {
-    if(meeting.endedAt) {
+    if (meeting.endedAt) {
       return res.status(410).json({
         success: false,
         message: "Meeting has Ended"
@@ -50,6 +50,23 @@ export const joinMeeting = async (req, res) => {
     }
 
     const meetingStatus = meeting.startedAt ? "active" : "waiting";
+
+    // Check if participant already exists
+    const existingParticipant = isAuthenticated
+    ? meeting.participants.find(
+        participant =>
+          participant.type === 'user' &&
+          participant.userId?.toString() === req.user._id.toString()
+      )
+    : null;
+    if (existingParticipant) {
+      return res.status(200).json({
+        success: true,
+        status: meetingStatus,
+        participant: existingParticipant
+      });
+    }
+
     const newParticipant = {
       type: isAuthenticated ? 'user' : 'guest',
       userId: isAuthenticated ? req.user._id : undefined,
@@ -83,21 +100,21 @@ export const startMeeting = async (req, res) => {
 
   const meeting = await Meeting.findOne({ meetingCode: meetingCode });
   
-  if(!meeting) {
+  if (!meeting) {
     return res.status(404).json({
       success: false,
       message: "Meeting Code Invalid"
     })
   }
 
-  if(meeting.endedAt) {
+  if (meeting.endedAt) {
     return res.status(410).json({
       success: false,
       message: "Meeting has Ended"
     })
   }
 
-  if(!meeting.createdBy.equals(req.user._id)) {
+  if (!meeting.createdBy.equals(req.user._id)) {
     return res.status(403).json({
       success: false,
       message: "You are not the host of this meeting"
@@ -129,7 +146,7 @@ export const endMeeting = async (req, res) => {
 
   const meeting = await Meeting.findOne({ meetingCode: meetingCode });
   
-  if(!meeting) {
+  if (!meeting) {
     return res.status(404).json({
       success: false,
       message: "Meeting Code Invalid"
@@ -143,14 +160,14 @@ export const endMeeting = async (req, res) => {
     });
   }
 
-  if(!meeting.startedAt) {
+  if (!meeting.startedAt) {
     return res.status(410).json({
       success: false,
       message: "Meeting has not Started"
     })
   }
 
-  if(!meeting.createdBy.equals(req.user._id)) {
+  if (!meeting.createdBy.equals(req.user._id)) {
     return res.status(403).json({
       success: false,
       message: "You are not the host of this meeting"

@@ -1,4 +1,4 @@
-.auth-overlay {
+.join-overlay {
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -10,10 +10,10 @@
   overflow-y: auto;
   background: rgba(33, 37, 41, 0.45);
   backdrop-filter: blur(6px);
-  animation: auth-fade 0.2s var(--ease) both;
+  animation: join-fade 0.2s var(--ease) both;
 }
 
-.auth-modal {
+.join-modal {
   position: relative;
   width: 100%;
   max-width: 420px;
@@ -23,10 +23,10 @@
   border: 1px solid rgba(33, 37, 41, 0.08);
   border-radius: 20px;
   box-shadow: 0 30px 70px rgba(33, 37, 41, 0.35);
-  animation: auth-pop 0.25s var(--ease) both;
+  animation: join-pop 0.25s var(--ease) both;
 }
 
-.auth-modal .auth-close {
+.join-modal .join-close.MuiIconButton-root {
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
@@ -34,16 +34,16 @@
   font-size: 1.1rem;
 }
 
-.auth-modal .auth-close:hover {
+.join-modal .join-close.MuiIconButton-root:hover {
   color: var(--gray-900);
 }
 
-.auth-head {
+.join-head {
   text-align: center;
   margin-bottom: 1.6rem;
 }
 
-.auth-mark {
+.join-mark {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -56,7 +56,7 @@
   border-radius: 14px;
 }
 
-.auth-title {
+.join-title {
   margin: 0;
   font-family: var(--font-display);
   font-size: 1.5rem;
@@ -65,28 +65,28 @@
   color: var(--gray-900);
 }
 
-.auth-subtitle {
+.join-subtitle {
   margin: 0.45rem 0 0;
   font-size: 0.9rem;
   line-height: 1.55;
   color: var(--gray-600);
 }
 
-.auth-field {
+.join-field {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   margin-bottom: 0.95rem;
 }
 
-.auth-field label {
+.join-field label {
   font-size: 0.78rem;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--gray-600);
 }
 
-.auth-field input {
+.join-field input {
   font-family: var(--font-body);
   font-size: 0.95rem;
   color: var(--gray-900);
@@ -98,16 +98,16 @@
   transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
 
-.auth-field input::placeholder {
+.join-field input::placeholder {
   color: var(--gray-400);
 }
 
-.auth-field input:focus {
+.join-field input:focus {
   border-color: var(--gray-900);
   box-shadow: 0 0 0 3px rgba(33, 37, 41, 0.10);
 }
 
-.auth-modal .auth-submit {
+.join-modal .join-submit {
   width: 100%;
   padding: 0.72rem 1rem;
   font-size: 0.98rem;
@@ -116,12 +116,12 @@
   box-shadow: 0 10px 24px rgba(33, 37, 41, 0.20);
 }
 
-.auth-modal .auth-submit:hover {
+.join-modal .join-submit:hover {
   background-color: var(--gray-700);
   box-shadow: 0 14px 30px rgba(33, 37, 41, 0.28);
 }
 
-@keyframes auth-fade {
+@keyframes join-fade {
   from {
     opacity: 0;
   }
@@ -131,7 +131,7 @@
   }
 }
 
-@keyframes auth-pop {
+@keyframes join-pop {
   from {
     opacity: 0;
     transform: translateY(12px) scale(0.98);
