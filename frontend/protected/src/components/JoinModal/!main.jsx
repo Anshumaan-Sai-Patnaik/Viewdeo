@@ -39,17 +39,20 @@ function JoinModal({ onClose, inMeeting, setInMeeting }) {
         showFlash(result.data.message, 'error');
         return;
       }
-      console.log(result);
       const participantId = result.data.participant._id;
       socketAPI.emit("request-to-join", {
         meetingCode,
         participantId
       },
       (response) => {
-        setInMeeting(response);
+        setInMeeting(response.status);
+        showFlash(response.message, response.status ? "success" : "error");
       });
       socketAPI.on("participant-accepted", (data) => {
-        console.log("Participant accepted:", data);
+        showFlash("You were accepted into the meeting", 'success');
+      });
+      socketAPI.on("participant-rejected", (data) => {
+        showFlash("You were rejected into the meeting", 'error');
       });
     } catch (error) {
       const message = error.response?.data?.message || "An unexpected error occurred while joining.";

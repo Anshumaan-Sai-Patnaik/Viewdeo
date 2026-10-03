@@ -1,6 +1,6 @@
 import Meeting from "../../../models/meeting.js";
 
-const handleAcceptParticipant = async (io, socket, { meetingCode, participantId }) => {
+const handleRejectParticipant = async (io, socket, { meetingCode, participantId }) => {
   if (!socket.request.user) {
     console.log("Unauthorized request");
     return;
@@ -20,7 +20,8 @@ const handleAcceptParticipant = async (io, socket, { meetingCode, participantId 
     return;
   }
 
-  if (socket.request.user._id.toString() !== meeting.createdBy.toString()) {
+  if (
+    socket.request.user._id.toString() !== meeting.createdBy.toString()) {
     console.log("You are not the Host of this Meeting");
     return;
   }
@@ -35,15 +36,13 @@ const handleAcceptParticipant = async (io, socket, { meetingCode, participantId 
     return;
   }
 
-  participant.status = "accepted";
+  participant.status = "rejected";
   await meeting.save();
 
-  io.in(`participant:${participantId}`).socketsJoin(`meeting:${meetingCode}`);
-
-  io.to(`participant:${participantId}`).emit("participant-accepted", {
+  io.to(`participant:${participantId}`).emit("participant-rejected", {
     meetingCode,
     participantId
   });
 };
 
-export { handleAcceptParticipant };
+export { handleRejectParticipant };

@@ -1,6 +1,7 @@
 import { handleStartMeeting } from "./handlers/meeting/start.js";
 import { handleRequestJoin } from "./handlers/participant/join.js";
 import { handleAcceptParticipant } from "./handlers/participant/accept.js";
+import { handleRejectParticipant } from "./handlers/participant/reject.js";
 import { handleDisconnect } from "./handlers/connection/disconnect.js";
 
 const onConnection = (io, socket) => {
@@ -19,6 +20,10 @@ const onConnection = (io, socket) => {
 
   socket.on("accept-a-participant", (data) => {
     handleAcceptParticipant(io, socket, data);
+  });
+
+  socket.on("reject-a-participant", (data) => {
+    handleRejectParticipant(io, socket, data);
   });
 
   socket.on("disconnect", () => {

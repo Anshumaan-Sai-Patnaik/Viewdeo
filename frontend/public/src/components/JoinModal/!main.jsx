@@ -34,17 +34,20 @@ function JoinModal({ onClose, inMeeting, setInMeeting }) {
       });
 
       if (result.data.success) {
-        console.log(result);
         const participantId = result.data.participant._id;
         socketAPI.emit("request-to-join", {
           meetingCode,
           participantId
         },
         (response) => {
-          setInMeeting(response);
+          setInMeeting(response.status);
+          response.message && showFlash(response.message, response.status ? "success" : "error");
         });
         socketAPI.on("participant-accepted", (data) => {
-          console.log("Participant accepted:", data);
+          showFlash("You were accepted into the meeting", 'success');
+        });
+        socketAPI.on("participant-rejected", (data) => {
+          showFlash("You were rejected into the meeting", 'error');
         });
       }
     } catch (error) {

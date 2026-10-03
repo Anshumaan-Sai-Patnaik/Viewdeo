@@ -4,27 +4,44 @@ const handleRequestJoin = async (io, socket, { meetingCode, participantId }, cal
   const meeting = await Meeting.findOne({ meetingCode });
   if (!meeting) {
     console.log("Meeting Code Invalid");
-    callback(false);
+    callback({
+      status: false,
+      message: "Meeting Code Invalid"
+    });
     return;
   }
   if (!meeting.startedAt) {
     console.log("Meeting has not Started");
-    callback(false);
+    callback({
+      status: false,
+      message: "Meeting has not Started"
+    });
     return;
   }
   if (meeting.endedAt) {
     console.log("Meeting has Ended");
-    callback(false);
+    callback({
+      status: false,
+      message: "Meeting has Ended"
+    });
     return;
   }
 
   const participant = meeting.participants.id(participantId);
   if (!participant) {
     console.log("Participant Id Invalid");
+    callback({
+      status: false,
+      message: "Participant Id Invalid"
+    });
     return;
   }
   if (participant.status !== "waiting") {
     console.log("Participant isn't Waiting");
+    callback({
+      status: false,
+      message: "Participant isn't Waiting"
+    });
     return;
   }
 
@@ -44,8 +61,10 @@ const handleRequestJoin = async (io, socket, { meetingCode, participantId }, cal
     name: participant.name
   });
 
-  callback(true);
-
+  callback({
+    status: true,
+    // message: "Participant verified"
+  });
 };
 
 export { handleRequestJoin };

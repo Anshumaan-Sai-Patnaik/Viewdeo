@@ -9,6 +9,7 @@ import socketAPI from "../../services/socket.js";
 
 function MeetModal({ onClose, meetingCode }) {
   const [participants, setParticipants] = useState([]);
+  const [handledParticipants, setHandledParticipants] = useState([]);
 
   const closeIfBackdrop = (event) => {
     if (event.target === event.currentTarget) onClose();
@@ -39,6 +40,18 @@ function MeetModal({ onClose, meetingCode }) {
       meetingCode,
       participantId
     });
+
+    setHandledParticipants((prev) => [...prev, participantId]);
+  };
+
+  const handleReject = (participantId) => {
+    console.log("Rejecting participant:", participantId);
+    socketAPI.emit("reject-a-participant", {
+      meetingCode,
+      participantId
+    });
+
+    setHandledParticipants((prev) => [...prev, participantId]);
   };
 
   return (
@@ -73,8 +86,11 @@ function MeetModal({ onClose, meetingCode }) {
                   </span>
                 </div>
 
-                <Button className="meet-submit" variant="contained" size="small" onClick={() => handleAccept(participant.participantId) }>
+                <Button className="meet-submit" variant="contained" size="small" onClick={() => handleAccept(participant.participantId) } disabled={handledParticipants.includes(participant.participantId)}>
                   Accept
+                </Button>
+                <Button className="meet-submit" variant="contained" size="small" onClick={() => handleReject(participant.participantId) } disabled={handledParticipants.includes(participant.participantId)}>
+                  Reject
                 </Button>
               </div>
             ))
