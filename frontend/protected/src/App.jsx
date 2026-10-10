@@ -76,6 +76,7 @@ function App() {
             setYou(null);
             setJoinRequest(false);
             setMeetingCode(null);
+            setCreateRequest(false);
           }}
           meetingCode={meetingCode}
           you={you}
@@ -101,7 +102,7 @@ function App() {
       )}
       {showJoinMeetModal && (
         <JoinMeetModal
-          onLeave={() => {
+          onLeaveOrEnd={() => {
             setShowJoinMeetModal(false);
             setYou(null);
             setJoinRequest(false);

@@ -40,7 +40,6 @@ const handleLeaveMeeting = async (io, socket, callback) => {
 
   io
     .to(`meeting:${meetingCode}`)
-    .except(`participant:${participantId}`)
     .emit("participant-left", {
       participantId,
       name: participant.name

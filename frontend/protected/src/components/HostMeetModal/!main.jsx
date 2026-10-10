@@ -20,13 +20,28 @@ function HostMeetModal({ onEnd, meetingCode, you }) {
     }
   ]);
 
-  const handleEnd = () => {
-    // yet to build
-    socketAPI.emit("end-meeting",
-    (response) => {
-      response.status && onEnd();
-      response.message && showFlash(response.message, response.status ? "success" : "error");
-    });
+  const handleEnd = async () => {
+    try {
+      const result = await httpAPI.post("/meeting/end", {
+        meetingCode: meetingCode
+      });
+
+      if (!result.data.success) {
+        showFlash(result.data.message, 'error');
+        return;
+      };
+
+      socketAPI.emit("end-the-meeting",
+        { meetingCode },
+        (response) => {
+          response.status && onEnd();
+          response.message && showFlash(response.message, response.status ? "success" : "error");
+        }
+      );
+    } catch (error) {
+      const message = error.response?.data?.message || "An unexpected error occurred while Ending Meeting.";
+      showFlash(message, 'error');
+    }
   };
 
   const handleAccept = (participantId) => {

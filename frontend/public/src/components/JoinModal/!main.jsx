@@ -37,6 +37,7 @@ function JoinModal({ onClose, request, setRequest, onSuccessfulJoin }) {
       });
 
       if (!result.data.success) {
+        setRequest(false);
         showFlash(result.data.message, 'error');
         return;
       };
@@ -51,6 +52,7 @@ function JoinModal({ onClose, request, setRequest, onSuccessfulJoin }) {
         }
       );
     } catch (error) {
+      setRequest(false);
       const message = error.response?.data?.message || "An unexpected error occurred while joining.";
       showFlash(message, 'error');
     }

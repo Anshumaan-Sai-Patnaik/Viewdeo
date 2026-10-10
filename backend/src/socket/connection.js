@@ -1,8 +1,9 @@
 import { handleStartMeeting } from "./handlers/meeting/start.js";
-import { handleRequestJoin } from "./handlers/participant/join.js";
-import { handleLeaveMeeting } from "./handlers/participant/leave.js";
 import { handleAcceptParticipant } from "./handlers/participant/accept.js";
 import { handleRejectParticipant } from "./handlers/participant/reject.js";
+import { handleEndMeeting } from "./handlers/meeting/end.js";
+import { handleRequestJoin } from "./handlers/participant/join.js";
+import { handleLeaveMeeting } from "./handlers/participant/leave.js";
 import { handleDisconnect } from "./handlers/connection/disconnect.js";
 
 const onConnection = (io, socket) => {
@@ -15,20 +16,24 @@ const onConnection = (io, socket) => {
     handleStartMeeting(socket, data, callback);
   });
 
-  socket.on("request-to-join", (data, callback) => {
-    handleRequestJoin(io, socket, data, callback);
-  });
-
-  socket.on("leave-meeting", (callback) => {
-    handleLeaveMeeting(io, socket, callback);
-  });
-
   socket.on("accept-a-participant", (data) => {
     handleAcceptParticipant(io, socket, data);
   });
 
   socket.on("reject-a-participant", (data) => {
     handleRejectParticipant(io, socket, data);
+  });
+  
+  socket.on("end-the-meeting", (data, callback) => {
+    handleEndMeeting(io, socket, data, callback);
+  });
+
+  socket.on("request-to-join", (data, callback) => {
+    handleRequestJoin(io, socket, data, callback);
+  });
+
+  socket.on("leave-meeting", (callback) => {
+    handleLeaveMeeting(io, socket, callback);
   });
 
   socket.on("disconnect", () => {

@@ -123,7 +123,7 @@ export const endMeeting = async (req, res) => {
   } catch (err) {
     return res.status(500).json({
       success: false,
-      message: err.message || "An error occurred while joining meeting."
+      message: err.message || "An error occurred while ending meeting."
     });
   }
 }

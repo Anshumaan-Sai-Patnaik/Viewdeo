@@ -7,7 +7,7 @@ import { useFlash } from '../../context/FlashContext.jsx';
 import httpAPI from '../../services/http.js';
 import socketAPI from "../../services/socket.js";
 
-function JoinMeetModal({ onLeave, meetingCode, you }) {
+function JoinMeetModal({ onLeaveOrEnd, meetingCode, you }) {
   const { showFlash } = useFlash();
 
   const [hostId, setHostId] = useState(null);
@@ -22,7 +22,7 @@ function JoinMeetModal({ onLeave, meetingCode, you }) {
   const handleLeave = () => {
     socketAPI.emit("leave-meeting",
     (response) => {
-      response.status && onLeave();
+      response.status && onLeaveOrEnd();
       response.message && showFlash(response.message, response.status ? "success" : "error");
     });
   };
@@ -95,12 +95,21 @@ function JoinMeetModal({ onLeave, meetingCode, you }) {
       showFlash(`${participantLeaving.name} left the meeting`,'info');
     };
 
+    const handleMeetingEnded = () => {
+      onLeaveOrEnd();
+      showFlash("Meeting has Ended", 'info');
+    }
+
     socketAPI.on("new-participant", handleNewParticipant);
     socketAPI.on("participant-left", handleParticipantLeave);
+
+    socketAPI.on("meeting-ended", handleMeetingEnded);
 
     return () => {
       socketAPI.off("new-participant", handleNewParticipant);
       socketAPI.off("participant-left", handleParticipantLeave);
+
+      socketAPI.off("meeting-ended", handleMeetingEnded);
     };
   }, []);
 

@@ -56,7 +56,7 @@ function AppInfo({ setAuthMode }) {
       )}
       {showJoinMeetModal && (
         <JoinMeetModal
-          onLeave={() => {
+          onLeaveOrEnd={() => {
             setShowJoinMeetModal(false);
             setYou(null);
             setRequest(false);
