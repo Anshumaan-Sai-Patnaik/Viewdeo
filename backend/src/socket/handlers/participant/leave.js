@@ -48,6 +48,7 @@ const handleLeaveMeeting = async (io, socket, callback) => {
 
   callback({
     status: true,
+    message: "You left the meeting"
   });
 };
 

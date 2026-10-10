@@ -63,7 +63,7 @@ const handleRequestJoin = async (io, socket, { meetingCode, participantId }, cal
 
   callback({
     status: true,
-    // message: "Participant verified"
+    message: "Waiting for host approval"
   });
 };
 

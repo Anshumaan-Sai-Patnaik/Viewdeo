@@ -157,4 +157,3 @@ function JoinMeetModal({ onLeave, meetingCode, you }) {
 }
 
 export default JoinMeetModal;
-

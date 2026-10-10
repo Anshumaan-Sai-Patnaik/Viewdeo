@@ -19,6 +19,7 @@ function JoinModal({ onClose, request, setRequest, onSuccessfulJoin }) {
 
   const handleJoinSubmit = async (event) => {
     event.preventDefault();
+    setRequest(true);
 
     const formData = new FormData(event.target);
     const meetingCode = formData.get('meetingCode').trim();
@@ -62,7 +63,6 @@ function JoinModal({ onClose, request, setRequest, onSuccessfulJoin }) {
         participantId: data.participantId,
         name: data.name
       });
-      onClose();
     };
     const handleRejected = () => {
       showFlash("You were rejected from the meeting", 'error');

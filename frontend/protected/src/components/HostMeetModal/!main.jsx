@@ -224,4 +224,3 @@ function HostMeetModal({ onEnd, meetingCode, you }) {
 }
 
 export default HostMeetModal;
-

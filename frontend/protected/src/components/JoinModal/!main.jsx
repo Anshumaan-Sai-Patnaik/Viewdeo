@@ -21,6 +21,7 @@ function JoinModal({ onClose, joinRequest, setJoinRequest, onSuccessfulJoin }) {
 
   const handleJoinSubmit = async (event) => {
     event.preventDefault();
+    setJoinRequest(true);
 
     const formData = new FormData(event.target);
     const meetingCode = formData.get('meetingCode').trim();
@@ -63,7 +64,6 @@ function JoinModal({ onClose, joinRequest, setJoinRequest, onSuccessfulJoin }) {
         participantId: data.participantId,
         name: data.name
       });
-      onClose();
     };
     const handleRejected = () => {
       setJoinRequest(false);
