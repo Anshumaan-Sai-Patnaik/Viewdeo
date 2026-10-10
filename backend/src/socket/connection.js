@@ -1,5 +1,6 @@
 import { handleStartMeeting } from "./handlers/meeting/start.js";
 import { handleRequestJoin } from "./handlers/participant/join.js";
+import { handleLeaveMeeting } from "./handlers/participant/leave.js";
 import { handleAcceptParticipant } from "./handlers/participant/accept.js";
 import { handleRejectParticipant } from "./handlers/participant/reject.js";
 import { handleDisconnect } from "./handlers/connection/disconnect.js";
@@ -10,12 +11,16 @@ const onConnection = (io, socket) => {
   console.log("A client connected");
   console.log(socket.id);
 
-  socket.on("start-the-meeting", (data) => {
-    handleStartMeeting(socket, data);
+  socket.on("start-the-meeting", (data, callback) => {
+    handleStartMeeting(socket, data, callback);
   });
 
   socket.on("request-to-join", (data, callback) => {
     handleRequestJoin(io, socket, data, callback);
+  });
+
+  socket.on("leave-meeting", (callback) => {
+    handleLeaveMeeting(io, socket, callback);
   });
 
   socket.on("accept-a-participant", (data) => {

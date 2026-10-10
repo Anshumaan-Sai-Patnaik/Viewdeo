@@ -5,8 +5,9 @@ import httpAPI from '../../services/http'
 import { useFlash } from '../../context/FlashContext.jsx';
 
 function AuthForm({ mode }) {
-  const isSignup = mode === 'signup';
   const { showFlash } = useFlash();
+
+  const isSignup = mode === 'signup';
 
   async function handleSubmit(event) {
     event.preventDefault();

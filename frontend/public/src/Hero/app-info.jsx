@@ -3,11 +3,16 @@ import Button from '@mui/material/Button';
 
 import { useFlash } from '../context/FlashContext.jsx';
 import JoinModal from '../components/JoinModal/!main.jsx';
+import JoinMeetModal from '../components/JoinMeetModal/!main.jsx';
 
 function AppInfo({ setAuthMode }) {
-  const [showJoinModal, setShowJoinModal] = useState(false);
-  const [inMeeting, setInMeeting] = useState(false);
   const { showFlash } = useFlash();
+
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [meetingCode, setMeetingCode] = useState(null);
+  const [request, setRequest] = useState(false);
+  const [you, setYou] = useState(null);
+  const [showJoinMeetModal, setShowJoinMeetModal] = useState(false);
 
   return ( 
     <div className="app-info">
@@ -28,11 +33,38 @@ function AppInfo({ setAuthMode }) {
         >
           Start a meeting
         </Button>
-        <Button variant="outlined" size="large" onClick={() => setShowJoinModal(true)} disabled={inMeeting}>Join with a code</Button>
+        <Button variant="outlined" size="large" onClick={() => setShowJoinModal(true)} disabled={request}>
+          Join with a code
+        </Button>
       </div>
 
       {showJoinModal && (
-        <JoinModal onClose={() => setShowJoinModal(false)} inMeeting={inMeeting} setInMeeting={setInMeeting} />
+        <JoinModal
+          onClose={() => setShowJoinModal(false)}
+          request={request}
+          setRequest={setRequest}
+
+          onSuccessfulJoin={(meetingCode, you) => {
+            setMeetingCode(meetingCode);
+            setYou(you);
+            setShowJoinModal(false);
+            setTimeout(() => {
+              setShowJoinMeetModal(true);
+            }, 500);
+          }}
+        />
+      )}
+      {showJoinMeetModal && (
+        <JoinMeetModal
+          onLeave={() => {
+            setShowJoinMeetModal(false);
+            setYou(null);
+            setRequest(false);
+            setMeetingCode(null);
+          }}
+          meetingCode={meetingCode}
+          you={you}
+        />
       )}
     </div>
    );

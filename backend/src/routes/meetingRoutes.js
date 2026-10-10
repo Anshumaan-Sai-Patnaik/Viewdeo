@@ -1,6 +1,6 @@
 import express from "express";
 
-import { createMeeting, startMeeting, joinMeeting, endMeeting } from "../controllers/meetingControllers.js";
+import { createMeeting, startMeeting, endMeeting, joinMeeting, getParticipants } from "../controllers/meetingControllers.js";
 
 const router = express.Router();
 
@@ -9,5 +9,6 @@ router.post("/start", startMeeting);
 router.post("/end", endMeeting);
 
 router.post("/join", joinMeeting);
+router.get("/:meetingCode/participants", getParticipants);
 
 export default router;

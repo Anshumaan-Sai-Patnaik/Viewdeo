@@ -41,9 +41,18 @@ const handleAcceptParticipant = async (io, socket, { meetingCode, participantId 
   io.in(`participant:${participantId}`).socketsJoin(`meeting:${meetingCode}`);
 
   io.to(`participant:${participantId}`).emit("participant-accepted", {
-    meetingCode,
-    participantId
+    participantId,
+    name: participant.name
   });
+  
+  io
+    .to(`meeting:${meetingCode}`)
+    .except(`participant:${participantId}`)
+    .emit("new-participant", {
+      participantId,
+      name: participant.name,
+      type: participant.type
+    });
 };
 
 export { handleAcceptParticipant };

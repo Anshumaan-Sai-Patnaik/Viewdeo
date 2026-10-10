@@ -1,17 +1,19 @@
 import './!main.css';
 
-import { useState } from 'react';
+import { useRef, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 
-import { useAuth } from '../../context/authContext'
+import { useAuth } from '../../context/authContext.jsx';
 import { useFlash } from '../../context/FlashContext.jsx';
 import httpAPI from '../../services/http.js';
 import socketAPI from "../../services/socket.js";
 
-function JoinModal({ onClose, inMeeting, setInMeeting }) {
+function JoinModal({ onClose, joinRequest, setJoinRequest, onSuccessfulJoin }) {
   const { user } = useAuth();
   const { showFlash } = useFlash();
+
+  const pendingJoinRef = useRef(null);
 
   const closeIfBackdrop = (event) => {
     if (event.target === event.currentTarget) onClose();
@@ -21,44 +23,61 @@ function JoinModal({ onClose, inMeeting, setInMeeting }) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
+    const meetingCode = formData.get('meetingCode').trim();
 
-    const meetingCode = formData.get('meetingCode');
-
-    if (!meetingCode.trim()) {
+    if (!meetingCode) {
       showFlash("Please enter the meeting code", "error");
       return;
     }
 
     try {
       const result = await httpAPI.post("/meeting/join", {
-        meetingCode: meetingCode.trim(),
+        meetingCode: meetingCode,
         name: user.username
       });
 
       if (!result.data.success) {
         showFlash(result.data.message, 'error');
         return;
-      }
+      };
+
+      pendingJoinRef.current = { meetingCode, participant: result.data.participant };
       const participantId = result.data.participant._id;
-      socketAPI.emit("request-to-join", {
-        meetingCode,
-        participantId
-      },
-      (response) => {
-        setInMeeting(response.status);
-        showFlash(response.message, response.status ? "success" : "error");
-      });
-      socketAPI.on("participant-accepted", (data) => {
-        showFlash("You were accepted into the meeting", 'success');
-      });
-      socketAPI.on("participant-rejected", (data) => {
-        showFlash("You were rejected into the meeting", 'error');
-      });
+      socketAPI.emit("request-to-join",
+        { meetingCode, participantId },
+        (response) => {
+          setJoinRequest(response.status);
+          response.message && showFlash(response.message, response.status ? "success" : "error");
+        }
+      );
     } catch (error) {
       const message = error.response?.data?.message || "An unexpected error occurred while joining.";
       showFlash(message, 'error');
     }
   };
+
+  useEffect(() => {
+    const handleAccepted = (data) => {
+      showFlash("You were accepted into the meeting", 'success');
+      onSuccessfulJoin(pendingJoinRef.current.meetingCode, {
+        participantId: data.participantId,
+        name: data.name
+      });
+      onClose();
+    };
+    const handleRejected = () => {
+      setJoinRequest(false);
+      showFlash("You were rejected from the meeting", 'error');
+    };
+
+    socketAPI.on("participant-accepted", handleAccepted);
+    socketAPI.on("participant-rejected", handleRejected);
+
+    return () => {
+      socketAPI.off("participant-accepted", handleAccepted);
+      socketAPI.off("participant-rejected", handleRejected);
+    };
+  }, []);
 
   return (
     <div className="join-overlay" onPointerDown={closeIfBackdrop}>
@@ -74,6 +93,9 @@ function JoinModal({ onClose, inMeeting, setInMeeting }) {
           <h2 className="join-title">
             Join a Meeting
           </h2>
+          <p className="join-subtitle">
+            Enter the meeting code.
+          </p>
         </div>
 
         <form className="join-form" onSubmit={handleJoinSubmit}>
@@ -88,7 +110,8 @@ function JoinModal({ onClose, inMeeting, setInMeeting }) {
               autoFocus
             />
           </div>
-          <Button className="join-submit" variant="contained" size="large" type="submit" style={{ marginTop: '1rem' }} disabled={inMeeting}>
+          
+          <Button className="join-submit" variant="contained" size="large" type="submit" style={{ marginTop: '1rem' }} disabled={joinRequest}>
             Join Meeting
           </Button>
         </form>

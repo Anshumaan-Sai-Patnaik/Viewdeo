@@ -3,11 +3,13 @@ import './!main.css';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 
+import { useAuth } from '../../context/authContext.jsx';
 import { useFlash } from '../../context/FlashContext.jsx';
 import httpAPI from '../../services/http.js';
 import socketAPI from "../../services/socket.js";
 
-function StartModal({ onClose, meetingCode, inMeeting, setInMeeting, setShowMeetModal }) {
+function StartModal({ onClose, meetingCode, joinRequest, setJoinRequest, onSuccessfulStart }) {
+  const { user } = useAuth();
   const { showFlash } = useFlash();
 
   const closeIfBackdrop = (event) => {
@@ -16,20 +18,39 @@ function StartModal({ onClose, meetingCode, inMeeting, setInMeeting, setShowMeet
 
   const handleStartSubmit = async () => {
     try {
-      const result = await httpAPI.post("/meeting/start", {
+      const startResult = await httpAPI.post("/meeting/start", {
         meetingCode: meetingCode
       });
 
-      if (!result.data.success) {
-        showFlash(result.data.message, 'error');
+      if (!startResult.data.success) {
+        showFlash(startResult.data.message, 'error');
         return;
       };
-      console.log(result);
-      socketAPI.emit("start-the-meeting", {
-        meetingCode
+
+      const joinResult = await httpAPI.post("/meeting/join", {
+        meetingCode: meetingCode,
+        name: user.username
       });
-      setInMeeting(true);
-      setShowMeetModal(true);
+
+      if (!joinResult.data.success) {
+        showFlash(joinResult.data.message, 'error');
+        return;
+      };
+
+      socketAPI.emit("start-the-meeting",
+        { meetingCode },
+        (response) => {
+          setJoinRequest(response.status);
+          response.message && showFlash(response.message, response.status ? "success" : "error");
+          if (response.status) {
+            const hostId = joinResult.data.participant._id
+            onSuccessfulStart({
+              participantId: hostId,
+              name: user.username
+            });
+          }
+        }
+      );
     } catch (error) {
       const message = error.response?.data?.message || "An unexpected error occurred while Starting Meeting.";
       showFlash(message, 'error');
@@ -52,7 +73,7 @@ function StartModal({ onClose, meetingCode, inMeeting, setInMeeting, setShowMeet
           </h2>
         </div>
 
-        <Button className="start-submit" variant="contained" size="large" onClick={handleStartSubmit} style={{ marginTop: '1rem' }} disabled={inMeeting}>
+        <Button className="start-submit" variant="contained" size="large" onClick={handleStartSubmit} style={{ marginTop: '1rem' }} disabled={joinRequest}>
           Start Meeting
         </Button>
       </div>

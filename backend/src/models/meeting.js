@@ -37,7 +37,7 @@ const meetingSchema = new mongoose.Schema({
       },
       status: {
         type: String,
-        enum: ["waiting", "accepted", "rejected"],
+        enum: ["waiting", "accepted", "rejected", "left"],
         default: "waiting"
       }
     }

@@ -26,7 +26,7 @@
   animation: join-pop 0.25s var(--ease) both;
 }
 
-.join-modal .join-close.MuiIconButton-root {
+.join-modal .join-close {
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
@@ -34,7 +34,7 @@
   font-size: 1.1rem;
 }
 
-.join-modal .join-close.MuiIconButton-root:hover {
+.join-modal .join-close:hover {
   color: var(--gray-900);
 }
 

@@ -18,7 +18,7 @@ export const createMeeting = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      meeting: newMeeting
+      meetingCode: newMeeting.meetingCode
     });
   } catch (err) {
     return res.status(500).json({
@@ -27,68 +27,6 @@ export const createMeeting = async (req, res) => {
     });
   }
 };
-
-export const joinMeeting = async (req, res) => {
-  const {meetingCode, name} = req.body;
-  const isAuthenticated = req.isAuthenticated();
-
-  const meeting = await Meeting.findOne({ meetingCode: meetingCode });
-  
-  if (!meeting) {
-    return res.status(404).json({
-      success: false,
-      message: "Meeting Code Invalid"
-    })
-  }
-
-  try {
-    if (meeting.endedAt) {
-      return res.status(410).json({
-        success: false,
-        message: "Meeting has Ended"
-      })
-    }
-
-    const meetingStatus = meeting.startedAt ? "active" : "waiting";
-
-    // Check if participant already exists
-    const existingParticipant = isAuthenticated
-    ? meeting.participants.find(
-        participant =>
-          participant.type === 'user' &&
-          participant.userId?.toString() === req.user._id.toString()
-      )
-    : null;
-    if (existingParticipant) {
-      return res.status(200).json({
-        success: true,
-        status: meetingStatus,
-        participant: existingParticipant
-      });
-    }
-
-    const newParticipant = {
-      type: isAuthenticated ? 'user' : 'guest',
-      userId: isAuthenticated ? req.user._id : undefined,
-      guestId: !isAuthenticated ? generateGuestId() : undefined,
-      name: name,
-      status: 'waiting'
-    }
-    const participant = meeting.participants.create(newParticipant);
-    meeting.participants.push(participant);
-    await meeting.save();
-    return res.status(201).json({
-      success: true,
-      status: meetingStatus,
-      participant: participant
-    });
-  } catch (err) {
-    return res.status(500).json({
-      success: false,
-      message: err.message || "An error occurred while joining meeting."
-    });
-  }
-}
 
 export const startMeeting = async (req, res) => {
   if (!req.isAuthenticated()) return res.status(401).json({
@@ -125,6 +63,7 @@ export const startMeeting = async (req, res) => {
     await Meeting.updateOne({ meetingCode: meetingCode }, {
       startedAt: new Date()
     });
+    
     return res.status(201).json({
       success: true
     });
@@ -188,3 +127,140 @@ export const endMeeting = async (req, res) => {
     });
   }
 }
+
+export const joinMeeting = async (req, res) => {
+  const {meetingCode, name} = req.body;
+  const isAuthenticated = req.isAuthenticated();
+
+  const meeting = await Meeting.findOne({ meetingCode: meetingCode });
+  
+  if (!meeting) {
+    return res.status(404).json({
+      success: false,
+      message: "Meeting Code Invalid"
+    })
+  }
+
+  try {
+    if (meeting.endedAt) {
+      return res.status(410).json({
+        success: false,
+        message: "Meeting has Ended"
+      })
+    }
+
+    const meetingStatus = meeting.startedAt ? "active" : "waiting";
+
+    // Check if participant already exists
+    const existingParticipant = isAuthenticated
+    ? meeting.participants.find(
+        participant =>
+          participant.type === 'user' &&
+          participant.userId?.toString() === req.user._id.toString()
+      )
+    : null;
+    if (existingParticipant) {
+      return res.status(200).json({
+        success: true,
+        status: meetingStatus,
+        participant: existingParticipant
+      });
+    }
+
+    const newParticipant = {
+      type: isAuthenticated ? 'user' : 'guest',
+      userId: isAuthenticated ? req.user._id : undefined,
+      guestId: !isAuthenticated ? generateGuestId() : undefined,
+      name: name,
+      status: isAuthenticated && meeting.createdBy.equals(req.user._id) ? 'accepted' : 'waiting'
+    }
+    const participant = meeting.participants.create(newParticipant);
+    meeting.participants.push(participant);
+    await meeting.save();
+    return res.status(201).json({
+      success: true,
+      status: meetingStatus,
+      participant: participant
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message || "An error occurred while joining meeting."
+    });
+  }
+}
+
+export const getParticipants = async (req, res) => {
+  const { meetingCode } = req.params;
+  const { participantId } = req.query;
+
+  const meeting = await Meeting.findOne({ meetingCode: meetingCode });
+
+  if (!meeting) {
+    return res.status(404).json({
+      success: false,
+      message: "Meeting Code Invalid"
+    });
+  }
+
+  try {
+    if (!meeting.startedAt) {
+      return res.status(400).json({
+        success: false,
+        message: "Meeting has not Started"
+      });
+    }
+
+    if (meeting.endedAt) {
+      return res.status(410).json({
+        success: false,
+        message: "Meeting has Ended"
+      });
+    }
+
+    const requestingParticipant = meeting.participants.find(
+      (participant) => participant._id.toString() === participantId
+    );
+
+    if (!requestingParticipant) {
+      return res.status(403).json({
+        success: false,
+        message: "Participant Id Invalid"
+      });
+    }
+
+    if (requestingParticipant.status !== "accepted") {
+      return res.status(403).json({
+        success: false,
+        message: "Participant request rejected"
+      });
+    }
+
+    const hostId = meeting.participants.find(
+      (participant) =>
+        participant.userId?.toString() === meeting.createdBy.toString()
+    )?._id;
+    const participants = meeting.participants
+      .filter((participant) =>
+        participant.status === "accepted" &&
+        participant._id.toString() !== participantId
+      )
+      .map((participant) => ({
+        participantId: participant._id,
+        type: participant.type,
+        name: participant.name
+      }));
+
+    return res.status(200).json({
+      success: true,
+      hostId,
+      participants
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message || "An error occurred while getting participants."
+    });
+  }
+};

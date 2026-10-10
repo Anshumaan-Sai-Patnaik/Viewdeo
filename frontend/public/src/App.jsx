@@ -1,17 +1,16 @@
 import './App.css'
 import { useEffect, useState } from "react";
 
-import httpAPI from "./services/http";
-import socketAPI from "./services/socket";
+import { useFlash } from "./context/FlashContext.jsx";
 import Hero from './Hero/!main'
 import NavBar from './NavBar/!main'
 import AuthModal from './components/AuthModal/!main'
-import { useFlash } from "./context/FlashContext.jsx";
+import httpAPI from "./services/http";
 
 function App() {
+  const { showFlash } = useFlash();
   const [checking, setChecking] = useState(true);
   const [authMode, setAuthMode] = useState(null);
-  const { showFlash } = useFlash();
 
   useEffect(() => {
     // Check for Google OAuth error in URL

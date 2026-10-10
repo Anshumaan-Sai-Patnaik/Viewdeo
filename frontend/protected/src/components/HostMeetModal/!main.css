@@ -1,0 +1,278 @@
+.meet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  overflow-y: auto;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(8px);
+  animation: meet-fade 0.2s var(--ease) both;
+}
+
+.meet-modal {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  margin: auto;
+  padding: clamp(1.5rem, 4vw, 2rem);
+  background: var(--gray-50);
+  border: 1px solid rgba(33, 37, 41, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.25);
+  animation: meet-pop 0.25s var(--ease) both;
+  display: flex;
+  flex-direction: column;
+}
+
+.meet-head {
+  text-align: center;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.meet-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--gray-900);
+  word-break: break-word;
+}
+
+.meet-code-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  background-color: var(--gray-200);
+  border-radius: 9999px;
+  font-size: 0.825rem;
+  color: var(--gray-700);
+  font-weight: 600;
+}
+
+.meet-code-badge span {
+  font-family: monospace;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--gray-900);
+}
+
+.meet-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.2rem;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 0.925rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gray-600);
+}
+
+.count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4rem;
+  height: 1.4rem;
+  padding: 0 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  background-color: var(--gray-200);
+  color: var(--gray-700);
+}
+
+.count-badge.active {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.waiting-participants,
+.all-participants {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: 190px;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+
+.no-participants {
+  margin: 0;
+  padding: 0.75rem;
+  text-align: center;
+  color: var(--gray-500);
+  font-size: 0.85rem;
+  background: var(--gray-100);
+  border-radius: 10px;
+  border: 1px dashed var(--gray-300);
+}
+
+.waiting-participant,
+.a-participant {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: #ffffff;
+  border: 1px solid rgba(33, 37, 41, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.waiting-participant:hover,
+.a-participant:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.participant-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.participant-name {
+  font-weight: 600;
+  font-size: 0.925rem;
+  color: var(--gray-900);
+  word-break: break-word;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 6px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.role-badge.host {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.role-badge.you {
+  background-color: #e0e7ff;
+  color: #4338ca;
+}
+
+.role-badge.user {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.role-badge.guest {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.participant-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.participant-actions .btn-accept.MuiButton-root {
+  background-color: #16a34a !important;
+  color: #ffffff !important;
+  text-transform: none;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.8rem;
+  box-shadow: none;
+}
+
+.participant-actions .btn-accept.MuiButton-root:hover {
+  background-color: #15803d !important;
+}
+
+.participant-actions .btn-reject.MuiButton-root {
+  color: #dc2626 !important;
+  border-color: #fca5a5 !important;
+  text-transform: none;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.participant-actions .btn-reject.MuiButton-root:hover {
+  background-color: #fef2f2 !important;
+  border-color: #dc2626 !important;
+}
+
+.meet-divider {
+  border: none;
+  border-top: 1px solid var(--gray-200);
+  margin: 1.2rem 0;
+}
+
+.meet-modal .meet-submit.MuiButton-root {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  text-transform: none;
+  font-family: var(--font-body);
+  font-weight: 700;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  margin-top: 1.25rem;
+}
+
+.meet-modal .meet-submit.end-meeting.MuiButton-root {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 20px rgba(220, 38, 38, 0.25);
+}
+
+.meet-modal .meet-submit.end-meeting.MuiButton-root:hover {
+  background-color: #b91c1c !important;
+  box-shadow: 0 10px 24px rgba(220, 38, 38, 0.35);
+}
+
+@keyframes meet-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes meet-pop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
